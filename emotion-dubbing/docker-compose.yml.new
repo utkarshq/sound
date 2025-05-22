@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  ffmpeg:
+    image: jrottenberg/ffmpeg
+    volumes:
+      - ${INPUT_DIR:-./input}:/input
+      - ${OUTPUT_DIR:-./output}:/output
+
+  whisper:
+    build:
+      context: .
+      dockerfile: docker/whisper-jp/Dockerfile
+    volumes:
+      - ${INPUT_DIR:-./input}:/input
+      - ${OUTPUT_DIR:-./output}:/output
+      - whisper_cache:/root/.cache/whisper
+    runtime: nvidia
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+
+  nemo-diarize:
+    build:
+      context: .
+      dockerfile: docker/nemo-diarize/Dockerfile
+    runtime: nvidia
+    volumes:
+      - ${INPUT_DIR:-./input}:/input
+      - ${OUTPUT_DIR:-./output}:/output
+      - nemo_cache:/root/.cache/torch
+
+  emotion-features:
+    build:
+      context: .
+      dockerfile: docker/emotion-features/Dockerfile
+    runtime: nvidia
+    volumes:
+      - ${INPUT_DIR:-./input}:/input
+      - ${OUTPUT_DIR:-./output}:/output
+      - emotion_model_cache:/root/.cache/torch
+      - opensmile_cache:/usr/local/share/opensmile
+
+  model-hub:
+    build:
+      context: .
+      dockerfile: docker/model-hub/Dockerfile
+    volumes:
+      - model_cache:/models
+      - ./config:/app/config:ro
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+
+volumes:
+  whisper_cache:
+  nemo_cache:
+  emotion_model_cache:
+  opensmile_cache:
+  model_cache:

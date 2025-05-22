@@ -1,0 +1,50 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Run Full Pipeline",
+            "type": "shell",
+            "command": "bash",
+            "args": [
+                "${workspaceFolder}/scripts/run_pipeline.sh"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "windows": {
+                "command": "bash.exe"
+            },
+            "problemMatcher": [],
+            "options": {
+                "env": {
+                    "PATH": "${env:PATH};C:\\Program Files\\Git\\bin"
+                }
+            }
+        },
+        {
+            "label": "Download Models",
+            "type": "docker-compose",
+            "command": "run",
+            "args": ["--rm", "model-hub"],
+            "group": "build",
+            "problemMatcher": []
+        },
+        {
+            "label": "Clean Output",
+            "type": "shell",
+            "command": "Remove-Item",
+            "args": [
+                "-Path",
+                "${workspaceFolder}/output/*",
+                "-Recurse",
+                "-Force"
+            ],
+            "problemMatcher": []
+        }
+    ]
+}

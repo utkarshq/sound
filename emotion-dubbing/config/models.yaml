@@ -1,0 +1,24 @@
+models:
+  whisper:
+    name: "large-v3"
+    source: "openai/whisper"
+    type: "whisper"
+    
+  diarization:
+    name: "ecapa_tdnn"
+    source: "nvidia/nemo"
+    type: "nemo"
+    
+  emotion:
+    name: "wav2vec2-large-robust-12-ft-emotion-msp-dim"
+    source: "audeering/wav2vec2"
+    type: "transformers"
+    
+  prosody:
+    name: "wav2vec2-large-robust-12-ft-emotion-msp-dim"
+    source: "audeering/wav2vec2"
+    type: "transformers"
+
+model_path: "/models"
+download_missing: true
+verify_downloads: true

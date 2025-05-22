@@ -1,0 +1,5 @@
+huggingface_hub
+torch
+transformers
+numpy
+pyyaml

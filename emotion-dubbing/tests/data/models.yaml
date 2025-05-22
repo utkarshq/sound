@@ -1,0 +1,33 @@
+models:
+  wav2vec2:
+    name: "facebook/wav2vec2-base-960h"
+    source: "facebook/wav2vec2"
+    type: "feature_extractor"
+
+  opensmile:
+    name: "eGeMAPSv02"
+    source: "opensmile"
+    type: "acoustic_features"
+
+  prosody:
+    name: "prosody_analyzer"
+    source: "internal"
+    type: "acoustic_features"
+
+  emotion_classifier:
+    name: "emotion-classifier-v1"
+    source: "internal"
+    type: "classifier"
+
+test_settings:
+  random_seed: 42
+  test_audio:
+    duration: 2.0
+    sample_rate: 44100
+    frequencies: [440, 880]
+    noise_level: 0.01
+  validation:
+    tolerance:
+      loudness_db: 1.0
+      timing_ms: 10.0
+      frequency_hz: 1.0

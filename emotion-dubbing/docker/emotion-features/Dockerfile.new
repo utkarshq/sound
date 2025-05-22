@@ -1,0 +1,31 @@
+FROM python:3.9-slim
+
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    git cmake g++ make \
+    libopenblas-dev portaudio19-dev ffmpeg \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install OpenSMILE from source with proper configuration
+RUN git clone --depth 1 --branch v3.0.0 https://github.com/audeering/opensmile.git && \
+    cd opensmile && \
+    mkdir build && \
+    cd build && \
+    cmake -DBUILD_ALL=ON -DCMAKE_INSTALL_PREFIX=/usr/local .. && \
+    make -j$(nproc) && \
+    make install && \
+    cd / && \
+    rm -rf /opensmile
+
+# Create proper config directory
+RUN mkdir -p /usr/local/share/opensmile/config
+ENV OPENSMILE_CONFIG=/usr/local/share/opensmile/config
+
+# Install Python packages
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+WORKDIR /app
+
+# Copy scripts
+COPY scripts/ /app/scripts/

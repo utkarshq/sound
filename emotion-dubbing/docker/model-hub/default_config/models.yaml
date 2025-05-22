@@ -1,0 +1,28 @@
+models:
+  whisper:
+    name: "large-v3"
+    source: "openai/whisper-large-v3"
+    type: "whisper"
+    verify: true
+
+  nemo_diarizer:
+    name: "titanet_large"
+    source: "nvidia/nemo-titanet-large"
+    type: "nemo"
+    verify: true
+
+  wav2vec2_emotion:
+    name: "wav2vec2-large-robust-12-ft-emotion-msp-dim"
+    source: "audeering/wav2vec2-large-robust-12-ft-emotion-msp-dim"
+    type: "transformers"
+    verify: true
+
+cache:
+  base_path: "/models"
+  verify_downloads: true
+  cleanup_on_error: true
+  max_retries: 3
+
+logging:
+  level: INFO
+  file: "model_manager.log"

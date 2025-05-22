@@ -1,0 +1,35 @@
+pipeline:
+  audio_extraction:
+    sample_rate: 16000
+    format: wav
+    channels: 1
+
+  transcription:
+    model: large-v3
+    language: ja
+    batch_size: 16
+    compute_type: float16
+
+  diarization:
+    min_speakers: 1
+    max_speakers: 2
+    speech_threshold: 0.3
+    clustering_threshold: 0.7
+
+  emotion_analysis:
+    window_size: 0.5
+    overlap: 0.25
+    features:
+      - wav2vec2
+      - opensmile
+      - prosody
+
+  output:
+    format: json
+    alignment:
+      max_gap: 0.5
+      min_duration: 0.1
+
+logging:
+  level: INFO
+  file: pipeline.log
